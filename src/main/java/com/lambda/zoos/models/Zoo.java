@@ -13,6 +13,8 @@ public class Zoo
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long zooid;
+
+    @Column(unique = true)
     private String zooname;
 
     @OneToMany(
