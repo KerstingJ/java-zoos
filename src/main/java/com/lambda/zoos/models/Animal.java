@@ -6,6 +6,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name="animals")
 public class Animal
 {
     @Id
@@ -13,8 +15,8 @@ public class Animal
     private long animalid;
     private String animaltype;
 
-    @ManyToMany(mappedBy = "animals", cascade = CascadeType.DETACH)
-    @JsonIgnoreProperties({"animals"})
+    @ManyToMany(mappedBy = "animals")
+    @JsonIgnoreProperties("animals")
     private List<Zoo> zoos = new ArrayList<>();
 
     public Animal()

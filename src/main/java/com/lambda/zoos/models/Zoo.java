@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="zoo")
+@Table(name="zoos")
 public class Zoo
 {
     @Id
@@ -16,7 +16,7 @@ public class Zoo
     private String zooname;
 
     @OneToMany(
-            mappedBy="zooid",
+            mappedBy="zoo",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY
@@ -24,12 +24,11 @@ public class Zoo
     @JsonIgnoreProperties({"zoo"})
     private List<Telephone> phones = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.DETACH)
-    @JoinTable(name="zoo_animal",
-            joinColumns = {@JoinColumn(name="animalid")},
-            inverseJoinColumns = {@JoinColumn(name="zooid")}
-    )
-    @JsonIgnoreProperties({"zoos"})
+    @ManyToMany
+    @JoinTable(name = "zooanimal",
+            joinColumns = {@JoinColumn(name = "zooid")},
+            inverseJoinColumns = {@JoinColumn(name = "animalid")})
+    @JsonIgnoreProperties("zoos")
     private List<Animal> animals = new ArrayList<>();
 
 
