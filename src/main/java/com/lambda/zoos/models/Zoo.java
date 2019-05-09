@@ -19,12 +19,7 @@ public class Zoo
     @Column(unique = true)
     private String zooname;
 
-    @OneToMany(
-            mappedBy="zoo",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
+    @OneToMany(mappedBy="zoo", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"zoo"})
     private List<Telephone> phones = new ArrayList<>();
 

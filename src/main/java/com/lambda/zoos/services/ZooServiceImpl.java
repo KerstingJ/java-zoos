@@ -29,10 +29,15 @@ public class ZooServiceImpl implements ZooService
     }
 
     @Override
+    public Zoo findById(long id)
+    {
+        return zooDao.findById(id).get();
+    }
+
+    @Override
     public Zoo findByName(String name)
     {
-        Zoo zoo = zooDao.findZooByZooname(name);
-        return zoo;
+        return zooDao.findZooByZooname(name);
     }
 
     @Override
@@ -42,7 +47,7 @@ public class ZooServiceImpl implements ZooService
         Zoo current = zooDao.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
 
-        if (zoo.getZooname() == null) {
+        if (zoo.getZooname() != null) {
             current.setZooname(zoo.getZooname());
         }
 
@@ -58,6 +63,7 @@ public class ZooServiceImpl implements ZooService
             for (Telephone p: newZooPhones) {
                 if (!ZooPhones.contains(p)) {
                     p.setZoo(current);
+                    phoneDao.save(p);
                     diff.add(p);
                 }
             }
