@@ -2,6 +2,7 @@ package com.lambda.zoos.services;
 
 import com.lambda.zoos.daos.AnimalDao;
 import com.lambda.zoos.models.Animal;
+import com.lambda.zoos.views.CountAnimalsInZoo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +28,11 @@ public class AnimalServiceImpl implements AnimalService
     {
         Animal animal = animalDao.findAnimalByAnimaltype(animalName);
         return animal;
+    }
+
+    @Override
+    public ArrayList<CountAnimalsInZoo> getCountAnimalsInZoo()
+    {
+        return animalDao.getCountAnimalsInZoo();
     }
 }

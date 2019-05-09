@@ -1,6 +1,8 @@
 package com.lambda.zoos.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.lambda.zoos.views.View;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class Zoo
             joinColumns = {@JoinColumn(name = "zooid")},
             inverseJoinColumns = {@JoinColumn(name = "animalid")})
     @JsonIgnoreProperties("zoos")
+    @JsonView(View.AnimalsInZoo.class)
     private List<Animal> animals = new ArrayList<>();
 
 
@@ -50,12 +53,12 @@ public class Zoo
         this.animals = animals;
     }
 
-    public Zoo(long zooid, String zooname, List<Telephone> phones, List<Animal> animals)
+    public Zoo(Zoo zoo)
     {
-        this.zooid = zooid;
-        this.zooname = zooname;
-        this.phones = phones;
-        this.animals = animals;
+        this.zooid = zoo.getZooid();
+        this.zooname = zoo.getZooname();
+        this.phones = zoo.getPhones();
+        this.animals = zoo.getAnimals();
     }
 
     public long getZooid()

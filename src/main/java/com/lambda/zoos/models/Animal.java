@@ -1,6 +1,8 @@
 package com.lambda.zoos.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.lambda.zoos.views.View;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ public class Animal
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long animalid;
+
+    @JsonView(View.AnimalsInZoo.class)
     private String animaltype;
 
     @ManyToMany(mappedBy = "animals")

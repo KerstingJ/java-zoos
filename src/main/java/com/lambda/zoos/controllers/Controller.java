@@ -7,10 +7,9 @@ import com.lambda.zoos.services.ZooService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 
 @RestController
@@ -22,7 +21,7 @@ public class Controller
     @Autowired
     AnimalService animalService;
 
-    @GetMapping("/test")
+    @GetMapping(value = "/test", produces = "application/json")
     public ResponseEntity<?> doTest()
     {
         ArrayList<Animal> animals = animalService.findAll();
@@ -30,7 +29,7 @@ public class Controller
     }
 
     //GET /zoos/zoos - returns all zoos with their phone numbers and animals
-    @GetMapping("/zoos/zoos")
+    @GetMapping(value = "/zoos/zoos", produces = "application/json")
     public ResponseEntity<?> getAllZoos()
     {
         ArrayList<Zoo> zoos = zooService.findAll();
@@ -38,7 +37,7 @@ public class Controller
     }
 
     //GET /zoos/{name} - return the zoo with this name with its phone numbers and animals
-    @GetMapping("/zoos/{name}")
+    @GetMapping(value = "/zoos/{name}", produces = "application/json")
     public ResponseEntity<?> getZooByName(@PathVariable String name)
     {
         Zoo zoo = zooService.findByName(name);
@@ -46,7 +45,7 @@ public class Controller
     }
 
     //GET /animals/animals - returns all animals with their zoos
-    @GetMapping("/animals/animals")
+    @GetMapping(value = "/animals/animals", produces = "application/json")
     public ResponseEntity<?> getAllAnimals()
     {
         ArrayList<Animal> animals = animalService.findAll();
@@ -54,17 +53,43 @@ public class Controller
     }
 
     //GET /animals/{name} - return the animal with a list of zoos where they can be found
-    @GetMapping("/animals/{name}")
+    @GetMapping(value = "/animals/{name}", produces = "application/json")
     public ResponseEntity<?> getAnimalByName(@PathVariable String name)
     {
         Animal animal = animalService.findByName(name);
         return new ResponseEntity<>(animal, HttpStatus.OK);
     }
 
+    //TODO -- make this actually work
     //GET /animals/count - that returns a JSON object list listing the animals and a count of how many zoos where they can be found. Use a custom query for this.
-    @GetMapping("/animals/count")
+    @GetMapping(value = "/animals/count", produces = "application/json")
     public ResponseEntity<?> getAnimalCounts()
     {
-     return new ResponseEntity<>(null, HttpStatus.OK);
+
+     return new ResponseEntity<>(animalService.getCountAnimalsInZoo(), HttpStatus.OK);
+    }
+
+    //PUT /admin/zoos/{id} - update the zoo referenced by the id number with the provided information
+    @PutMapping(value = "/admin/zoos/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> updateZoo(@PathVariable long id, @Valid @RequestBody Zoo zoo)
+    {
+        zooService.update(zoo, id);
+
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
+    //POST /admin/zoos - add the zoo
+    @PostMapping(value = "/admin/zoos", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> addZoo(@Valid @RequestBody Zoo zoo)
+    {
+        Zoo rtn = zooService.save(zoo);
+        return new ResponseEntity<>(rtn, HttpStatus.OK);
+    }
+
+    //DELETE /admin/zoos/{id} - delete the zoo, associated phone numbers, and zoo animals combination associated with this zoo id
+    @PostMapping(value = "/admin/zoos/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> deleteZoo(@PathVariable long id)
+    {
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }
